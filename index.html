@@ -52,9 +52,11 @@
 </footer>
 
 <script>
-    // These two lines are the ONLY places where these variables are defined
-    const sbUrl = "https://ywbppvtwsnmloqgwhxla.supabase.co"; 
-    const sbKey = "sb_publishable_wAqtDS8qfZM2urgJX9I6Dg_MUIIf7pz"; 
+    // ✅ FIX 1: Replace the value below with your actual Supabase anon/public key.
+    // Go to: Supabase Dashboard → Project Settings → API → "anon public" key
+    // It should look like: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+    const sbUrl = "https://ywbppvtwsnmloqgwhxla.supabase.co";
+    const sbKey = "sb_publishable_wAqtDS8qfZM2urgJX9I6Dg_MUIIf7pz"; // ← Replace this!
 
     const client = window.supabase.createClient(sbUrl, sbKey);
 
@@ -64,8 +66,10 @@
         const emailInput = document.getElementById('email').value.trim().toLowerCase();
         let contactInput = document.getElementById('contact').value.trim();
 
-        // Fix: Remove leading 0 if the user adds it
-        if (contactInput.startsWith('0')) { contactInput = contactInput.substring(1); }
+        // Remove leading 0 if the user adds it
+        if (contactInput.startsWith('0')) {
+            contactInput = contactInput.substring(1);
+        }
 
         if (!emailInput || !contactInput) {
             msg.innerHTML = "<div class='error-box'>Please fill in all fields.</div>";
@@ -76,25 +80,50 @@
         msg.innerHTML = "Authenticating...";
 
         try {
+            // ✅ FIX 2: Cast contactInput to a number since the DB column is numeric type.
+            const contactAsNumber = parseInt(contactInput, 10);
+
+            if (isNaN(contactAsNumber)) {
+                msg.innerHTML = "<div class='error-box'>Please enter a valid contact number.</div>";
+                btn.disabled = false;
+                return;
+            }
+
+            // ✅ FIX 3: Use .ilike() for email (case-insensitive) and cast contact to number.
             const { data, error } = await client
                 .from('COR')
                 .select('*')
-                .eq('EMAIL ADDRESS REGISTERED ON IAMS', emailInput)
-                .eq('CONTACT NO. REGISTERED ON IAMS', contactInput);
+                .ilike('EMAIL ADDRESS REGISTERED ON IAMS', emailInput)
+                .eq('CONTACT NO. REGISTERED ON IAMS', contactAsNumber);
 
-            if (error || !data || data.length === 0) {
-                msg.innerHTML = "<div class='error-box'><strong>❌ Incorrect Details</strong><br>No matching record found.</div>";
+            if (error) {
+                // Log the actual Supabase error for debugging
+                console.error('Supabase error:', error);
+                msg.innerHTML = `<div class='error-box'><strong>❌ Database Error</strong><br>${error.message}</div>`;
+                btn.disabled = false;
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                msg.innerHTML = "<div class='error-box'><strong>❌ Incorrect Details</strong><br>No matching record found. Please check your email and contact number.</div>";
                 btn.disabled = false;
             } else {
                 const record = data[0];
+                const corUrl = record['COR URL'];
+                const position = record['POSITION'] || 'Applicant';
+
                 msg.innerHTML = `
                     <div class="success-box">
                         <strong>✅ Verified!</strong><br>
-                        Position: ${record['POSITION'] || 'Applicant'}<br><br>
-                        <a href="${record['COR URL']}" target="_blank" class="download-btn">📥 DOWNLOAD PDF</a>
+                        Position: ${position}<br><br>
+                        ${corUrl
+                            ? `<a href="${corUrl}" target="_blank" class="download-btn">📥 DOWNLOAD PDF</a>`
+                            : `<span style="color:#c53030;">No certificate file linked to this record yet.</span>`
+                        }
                     </div>`;
             }
         } catch (err) {
+            console.error('Unexpected error:', err);
             msg.innerHTML = "<div class='error-box'>System busy. Please try again.</div>";
             btn.disabled = false;
         }
