@@ -7,96 +7,125 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --boc-blue: #002d5a; --boc-gold: #c5a059; --light-bg: #f4f7f9; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--light-bg); margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: var(--boc-blue); color: white; padding: 25px; border-bottom: 5px solid var(--boc-gold); text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--light-bg); margin: 0; display: flex; flex-direction: column; min-height: 100vh; color: #333; }
+        header { background: var(--boc-blue); color: white; padding: 30px 20px; border-bottom: 5px solid var(--boc-gold); text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .logo-main { font-size: 2.5rem; font-weight: 900; letter-spacing: 4px; margin: 0; }
+        .logo-sub { font-size: 0.85rem; letter-spacing: 1.5px; opacity: 0.9; margin-top: 5px; text-transform: uppercase; }
         .container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 100%; max-width: 450px; text-align: center; }
-        h2 { color: var(--boc-blue); margin-bottom: 25px; font-weight: 700; }
-        .input-group { text-align: left; margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; font-size: 0.9rem; }
-        input { width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
-        button { width: 100%; padding: 16px; background: var(--boc-blue); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #004080; transform: translateY(-2px); }
-        button:disabled { background: #999; cursor: not-allowed; }
-        #message { margin-top: 25px; min-height: 50px; }
-        .success-box { background: #e7f3ef; color: #2d5a45; padding: 20px; border-radius: 8px; border: 1px solid #d1e7dd; }
-        .error-text { color: #dc3545; font-weight: bold; }
-        .download-btn { display: inline-block; margin-top: 15px; padding: 12px 25px; background: var(--boc-gold); color: white; text-decoration: none; border-radius: 5px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        footer { padding: 20px; text-align: center; font-size: 0.85rem; color: #666; background: #fff; border-top: 1px solid #eee; }
+        .card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border-top: 6px solid var(--boc-blue); }
+        h2 { color: var(--boc-blue); margin-top: 0; margin-bottom: 25px; font-size: 1.6rem; text-align: center; font-weight: 700; }
+        .input-group { margin-bottom: 18px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; font-size: 0.9rem; }
+        input { width: 100%; padding: 14px; border: 1px solid #ccd0d5; border-radius: 8px; box-sizing: border-box; font-size: 1rem; transition: border-color 0.2s; }
+        input:focus { outline: none; border-color: var(--boc-blue); box-shadow: 0 0 0 3px rgba(0,45,90,0.1); }
+        button { width: 100%; padding: 16px; background: var(--boc-blue); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        button:hover { background: #004080; transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        button:disabled { background: #adb5bd; cursor: not-allowed; transform: none; }
+        #message { margin-top: 25px; text-align: center; min-height: 60px; }
+        .error-box { background: #fff5f5; color: #c53030; padding: 15px; border-radius: 8px; border: 1px solid #feb2b2; font-size: 0.95rem; line-height: 1.4; }
+        .success-box { background: #e7f3ef; color: #2d5a45; padding: 20px; border-radius: 8px; border: 1px solid #d1e7dd; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        .download-btn { display: inline-block; margin-top: 15px; padding: 12px 25px; background: var(--boc-gold); color: white; text-decoration: none; border-radius: 6px; font-weight: bold; transition: background 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .download-btn:hover { background: #b18e4a; }
+        footer { text-align: center; padding: 25px; font-size: 0.8rem; color: #777; background: white; border-top: 1px solid #eee; }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-size: 2.2rem; font-weight: 900; letter-spacing: 3px; margin-bottom: 5px;">B.E.R.T.H.</div>
-    <div style="font-size: 0.9rem; letter-spacing: 1px; opacity: 0.9;">BOC EXAMINATION RATING TRANSFER HOST</div>
+    <h1 class="logo-main">B.E.R.T.H.</h1>
+    <div class="logo-sub">BOC Examination Rating Transfer Host</div>
 </header>
 
 <div class="container">
     <div class="card">
-        <h2>Secure Rating Retrieval</h2>
+        <h2>Secure Rating Download</h2>
+        
+        <div class="input-group">
+            <label>Full Name (First Middle Last)</label>
+            <input type="text" id="fullName" placeholder="e.g. JUAN Q. DELA CRUZ">
+        </div>
+
         <div class="input-group">
             <label>Registered Email Address</label>
-            <input type="email" id="email" placeholder="juan.delacruz@example.com">
+            <input type="email" id="email" placeholder="email@example.com">
         </div>
+
         <div class="input-group">
             <label>Contact Number (as registered)</label>
             <input type="text" id="contact" placeholder="9171234567">
         </div>
+
         <button id="submitBtn" onclick="verifyUser()">GENERATE CERTIFICATE PDF</button>
+        
         <div id="message"></div>
     </div>
 </div>
 
 <footer>
-    &copy; 2026 Bureau of Customs | Official Score Retrieval System <br>
-    Secure & Confidential | HRMD-IAG
+    &copy; 2026 Bureau of Customs. All Rights Reserved. <br>
+    Official Score Retrieval System | Secure & Confidential Information
 </footer>
 
 <script>
-    // --- REPLACE THESE WITH YOUR ACTUAL SUPABASE KEYS ---
+    // --- CONFIGURATION ---
     const SB_URL = "https://ywbppvtwsnmloqgwhxla.supabase.co"; 
     const SB_KEY = "sb_publishable_wAqtDS8qfZM2urgJX9I6Dg_MUIIf7pz"; 
-    // ----------------------------------------------------
+    // ---------------------
 
     const supabase = window.supabase.createClient(SB_URL, SB_KEY);
 
     async function verifyUser() {
         const btn = document.getElementById('submitBtn');
         const msg = document.getElementById('message');
-        const emailInput = document.getElementById('email').value.trim();
-        const contactInput = document.getElementById('contact').value.trim();
+        
+        const nameInput = document.getElementById('fullName').value.trim();
+        const emailInput = document.getElementById('email').value.trim().toLowerCase();
+        let contactInput = document.getElementById('contact').value.trim();
+
+        // Auto-fix: Remove leading zero if user includes it (e.g. 0917 -> 917)
+        if (contactInput.startsWith('0')) {
+            contactInput = contactInput.substring(1);
+        }
 
         if (!emailInput || !contactInput) {
-            msg.innerHTML = "<span class='error-text'>Please enter both fields.</span>";
+            msg.innerHTML = "<div class='error-box'><strong>Notice:</strong> Please fill in all required fields to proceed.</div>";
             return;
         }
 
         btn.disabled = true;
-        msg.innerHTML = "<p>Connecting to B.E.R.T.H. database...</p>";
+        msg.innerHTML = "<p style='color: #666;'>Authenticating with Bureau records...</p>";
 
         try {
+            // Query the 'COR' table using your specific column names
             const { data, error } = await supabase
-                .from('COR') // Matches your table name
+                .from('COR')
                 .select('*')
                 .eq('EMAIL ADDRESS REGISTERED ON IAMS', emailInput)
-                .eq('CONTACT NO. REGISTERED ON IAMS', contactInput)
-                .single();
+                .eq('CONTACT NO. REGISTERED ON IAMS', contactInput);
 
-            if (error || !data) {
-                msg.innerHTML = "<span class='error-text'>Authentication Failed.<br>Details do not match our records.</span>";
+            if (error || !data || data.length === 0) {
+                // If no record found
+                msg.innerHTML = `
+                    <div class="error-box">
+                        <strong>❌ Incorrect Details</strong><br>
+                        The Email or Contact Number does not match our records. Please ensure accuracy or contact HRMD.
+                    </div>`;
                 btn.disabled = false;
             } else {
-                const downloadUrl = data['COR URL']; // Column from your screenshot
+                // Record found
+                const record = data[0];
+                const downloadUrl = record['COR URL'];
+
                 msg.innerHTML = `
                     <div class="success-box">
-                        <strong>Identity Verified!</strong><br>
-                        Score for: ${data['POSITION'] || 'Applicant'}<br><br>
+                        <strong style="font-size: 1.1rem;">✅ Identity Verified!</strong><br>
+                        <p style="margin: 10px 0;">Rating for: <strong>${record['POSITION'] || 'BOC Examinee'}</strong></p>
                         <a href="${downloadUrl}" target="_blank" class="download-btn">📥 DOWNLOAD CERTIFICATE</a>
                     </div>`;
             }
         } catch (err) {
-            msg.innerHTML = "<span class='error-text'>Server Timeout. Please try again.</span>";
+            console.error(err);
+            msg.innerHTML = "<div class='error-box'><strong>System Error:</strong> Unable to connect to the database. Please try again later.</div>";
             btn.disabled = false;
         }
     }
