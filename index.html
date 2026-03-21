@@ -5,115 +5,666 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>B.E.R.T.H. | BOC Examination Rating Transfer Host</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
     <style>
-        :root { --boc-blue: #002d5a; --boc-gold: #c5a059; --light-bg: #f4f7f9; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--light-bg); margin: 0; display: flex; flex-direction: column; min-height: 100vh; color: #333; }
-        header { background: var(--boc-blue); color: white; padding: 30px 20px; border-bottom: 5px solid var(--boc-gold); text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border-top: 6px solid var(--boc-blue); text-align: center; }
-        .input-group { margin-bottom: 18px; text-align: left; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; font-size: 0.9rem; }
-        input { width: 100%; padding: 14px; border: 1px solid #ccd0d5; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
-        button { width: 100%; padding: 16px; background: var(--boc-blue); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        button:hover { background: #004080; }
-        button:disabled { background: #adb5bd; cursor: not-allowed; }
-        #message { margin-top: 25px; min-height: 60px; }
-        .error-box { background: #fff5f5; color: #c53030; padding: 15px; border-radius: 8px; border: 1px solid #feb2b2; }
-        .success-box { background: #e7f3ef; color: #2d5a45; padding: 20px; border-radius: 8px; border: 1px solid #d1e7dd; }
-        .download-btn { display: inline-block; margin-top: 15px; padding: 12px 25px; background: var(--boc-gold); color: white; text-decoration: none; border-radius: 6px; font-weight: bold; }
-        footer { text-align: center; padding: 25px; font-size: 0.8rem; color: #666; }
+        :root {
+            --navy:        #001f4d;
+            --navy-mid:    #002d6b;
+            --navy-light:  #003d8f;
+            --navy-pale:   #e8eef7;
+            --white:       #ffffff;
+            --off-white:   #f5f7fb;
+            --gold:        #c5a059;
+            --gold-light:  #ddb96e;
+            --text-body:   #1a2b4a;
+            --text-muted:  #5a6e8c;
+            --border:      #d0daea;
+            --border-nav:  rgba(255,255,255,0.18);
+            --shadow-card: 0 20px 60px rgba(0,31,77,0.13), 0 4px 16px rgba(0,31,77,0.08);
+        }
+ 
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--off-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-body);
+            overflow-x: hidden;
+        }
+ 
+        /* Subtle dot-grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(0,45,107,0.07) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
+            z-index: 0;
+        }
+ 
+        /* ── Header ── */
+        header {
+            position: relative;
+            z-index: 10;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, var(--navy-light) 100%);
+            padding: 0 48px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            min-height: 90px;
+            box-shadow: 0 4px 24px rgba(0,31,77,0.25);
+        }
+ 
+        /* Gold accent stripe at very top */
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+        }
+ 
+        .logo-slot {
+            width: 66px;
+            height: 66px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+            transition: border-color 0.3s, background 0.3s;
+        }
+ 
+        .logo-slot:hover {
+            border-color: var(--gold);
+            background: rgba(255,255,255,0.15);
+        }
+ 
+        .logo-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 7px;
+        }
+ 
+        .header-text { flex: 1; }
+ 
+        .header-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 2.8vw, 2rem);
+            font-weight: 900;
+            letter-spacing: 7px;
+            color: var(--white);
+            line-height: 1;
+        }
+ 
+        .header-subtitle {
+            margin-top: 5px;
+            font-size: 0.68rem;
+            letter-spacing: 2.5px;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+ 
+        .header-divider {
+            width: 1px;
+            height: 40px;
+            background: var(--border-nav);
+        }
+ 
+        .header-meta { text-align: right; }
+ 
+        .header-meta .agency {
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+ 
+        .header-meta .dept {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.85);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+ 
+        /* ── Hero band ── */
+        .hero-band {
+            position: relative;
+            z-index: 5;
+            background: var(--navy-mid);
+            padding: 11px 48px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+ 
+        .hero-band .dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--gold);
+            flex-shrink: 0;
+        }
+ 
+        .hero-band span {
+            font-size: 0.69rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            font-weight: 500;
+        }
+ 
+        .hero-band .pill {
+            margin-left: auto;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(197,160,89,0.15);
+            border: 1px solid rgba(197,160,89,0.3);
+            font-size: 0.65rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            font-weight: 600;
+        }
+ 
+        /* ── Main ── */
+        main {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 52px 20px 60px;
+        }
+ 
+        .main-inner {
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+ 
+        /* ── Page title ── */
+        .page-title { text-align: center; }
+ 
+        .page-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.35rem, 3vw, 1.75rem);
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.2;
+        }
+ 
+        .page-title p {
+            margin-top: 8px;
+            font-size: 0.87rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+ 
+        /* ── Card ── */
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 44px 40px;
+            box-shadow: var(--shadow-card);
+            animation: fadeUp 0.55s ease both;
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        /* Navy left accent bar */
+        .card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 5px;
+            background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 100%);
+            border-radius: 18px 0 0 18px;
+        }
+ 
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+ 
+        /* ── Section label ── */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+ 
+        .section-label-icon {
+            width: 36px; height: 36px;
+            border-radius: 9px;
+            background: var(--navy-pale);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+ 
+        .section-label-text .title {
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+ 
+        .section-label-text .subtitle {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+ 
+        /* ── Input group ── */
+        .input-group { margin-bottom: 20px; }
+ 
+        label {
+            display: block;
+            font-size: 0.73rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+ 
+        .input-wrapper { position: relative; }
+ 
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+ 
+        input {
+            width: 100%;
+            padding: 14px 14px 14px 42px;
+            background: var(--off-white);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-body);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+ 
+        input::placeholder { color: #b0bcc8; }
+ 
+        input:focus {
+            border-color: var(--navy-mid);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(0,45,107,0.09);
+        }
+ 
+        .input-wrapper:focus-within .input-icon { color: var(--navy-mid); }
+ 
+        /* ── Separator ── */
+        .sep {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 6px 0 22px;
+        }
+ 
+        .sep::before, .sep::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+ 
+        .sep span {
+            font-size: 0.67rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #b0bcc8;
+            font-weight: 600;
+        }
+ 
+        /* ── Button ── */
+        .btn-primary {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, var(--navy-light) 100%);
+            background-size: 200% 100%;
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-position 0.4s, transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+            box-shadow: 0 4px 18px rgba(0,45,107,0.28);
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .btn-primary:hover:not(:disabled) {
+            background-position: 100% 0;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 28px rgba(0,45,107,0.35);
+        }
+ 
+        .btn-primary:active:not(:disabled) { transform: translateY(0); }
+ 
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+ 
+        .btn-primary.loading::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.2s infinite;
+        }
+ 
+        @keyframes shimmer {
+            from { background-position: -200% 0; }
+            to   { background-position:  200% 0; }
+        }
+ 
+        /* ── Info note ── */
+        .note-strip {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 14px;
+            background: var(--navy-pale);
+            border-radius: 8px;
+            margin-top: 18px;
+            border-left: 3px solid var(--navy-mid);
+        }
+ 
+        .note-strip .note-icon { font-size: 0.85rem; margin-top: 1px; flex-shrink: 0; }
+ 
+        .note-strip p {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+ 
+        /* ── Message area ── */
+        #message { margin-top: 22px; }
+ 
+        .error-box {
+            padding: 15px 17px;
+            background: #fff5f5;
+            border: 1.5px solid #fcc;
+            border-radius: 10px;
+            color: #b91c1c;
+            font-size: 0.87rem;
+            line-height: 1.55;
+            animation: fadeUp 0.3s ease;
+        }
+ 
+        .success-box {
+            padding: 24px 22px;
+            background: var(--navy-pale);
+            border: 1.5px solid #c1cfe8;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            animation: fadeUp 0.3s ease;
+            text-align: center;
+        }
+ 
+        .success-box .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--navy);
+            padding: 5px 16px;
+            border-radius: 20px;
+            font-size: 0.68rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--white);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+ 
+        .success-box .position-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+ 
+        .success-box .position-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            color: var(--navy);
+            margin-bottom: 22px;
+            font-weight: 700;
+        }
+ 
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 28px;
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: transform 0.15s, box-shadow 0.2s;
+            box-shadow: 0 4px 16px rgba(0,45,107,0.28);
+        }
+ 
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,45,107,0.38);
+        }
+ 
+        .no-cert { color: #b91c1c; font-size: 0.85rem; }
+ 
+        /* ── Footer ── */
+        footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            font-size: 0.72rem;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            background: var(--white);
+        }
+ 
+        footer .footer-brand {
+            font-weight: 700;
+            color: var(--navy);
+        }
+ 
+        /* ── Responsive ── */
+        @media (max-width: 560px) {
+            header { padding: 0 20px; min-height: 76px; gap: 14px; }
+            .header-divider, .header-meta { display: none; }
+            .hero-band { padding: 10px 20px; }
+            main { padding: 36px 16px 48px; }
+            .card { padding: 36px 24px; }
+        }
     </style>
 </head>
 <body>
-
+ 
+<!-- HEADER -->
 <header>
-    <h1 style="margin:0; letter-spacing:4px;">B.E.R.T.H.</h1>
-    <div style="font-size: 0.85rem; opacity: 0.9; margin-top: 5px;">BOC EXAMINATION RATING TRANSFER HOST</div>
-</header>
-
-<div class="container">
-    <div class="card">
-        <h2 style="color: var(--boc-blue); margin-top:0;">Secure Rating Download</h2>
-        <div class="input-group">
-            <label>Registered Email Address on IAMS</label>
-            <input type="email" id="email" placeholder="e.g. juan.delacruz@example.com">
-        </div>
-        <div class="input-group">
-            <label>Contact Number (as registered on IAMS)</label>
-            <input type="text" id="contact" placeholder="e.g. 9171234567">
-        </div>
-        <button id="submitBtn" onclick="verifyUser()">GENERATE CERTIFICATE OF RATING</button>
-        <div id="message"></div>
+    <div class="logo-slot">
+        <img src="BOC LOGO.png" alt="Bureau of Customs Logo"
+             onerror="this.parentElement.innerHTML='<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;36&quot; height=&quot;36&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;rgba(255,255,255,0.6)&quot; stroke-width=&quot;1.5&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/><line x1=&quot;2&quot; y1=&quot;12&quot; x2=&quot;22&quot; y2=&quot;12&quot;/><path d=&quot;M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z&quot;/></svg>'">
     </div>
+    <div class="header-text">
+        <h1>B.E.R.T.H.</h1>
+        <div class="header-subtitle">BOC Examination Rating Transfer Host</div>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-meta">
+        <div class="agency">Republic of the Philippines</div>
+        <div class="dept">Bureau of Customs</div>
+    </div>
+</header>
+ 
+<!-- HERO BAND -->
+<div class="hero-band">
+    <div class="dot"></div>
+    <span>Human Resource Management Division</span>
+    <div class="pill">🔒 Secure Portal</div>
 </div>
-
+ 
+<!-- MAIN -->
+<main>
+    <div class="main-inner">
+ 
+        <div class="page-title">
+            <h2>Certificate of Rating Retrieval</h2>
+            <p>Authenticate with your IAMS-registered credentials to access and download your official Certificate of Rating.</p>
+        </div>
+ 
+        <div class="card">
+ 
+            <div class="section-label">
+                <div class="section-label-icon">🪪</div>
+                <div class="section-label-text">
+                    <div class="title">Identity Verification</div>
+                    <div class="subtitle">Enter details exactly as registered on IAMS</div>
+                </div>
+            </div>
+ 
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">✉</span>
+                    <input type="email" id="email" placeholder="juan.delacruz@example.com" autocomplete="email">
+                </div>
+            </div>
+ 
+            <div class="input-group">
+                <label for="contact">Contact Number</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">📱</span>
+                    <input type="text" id="contact" placeholder="9171234567" inputmode="numeric" maxlength="11">
+                </div>
+            </div>
+ 
+            <div class="sep"><span>Proceed</span></div>
+ 
+            <button class="btn-primary" id="submitBtn" onclick="verifyUser()">
+                Generate Certificate of Rating
+            </button>
+ 
+            <div class="note-strip">
+                <span class="note-icon">ℹ️</span>
+                <p>Your information is matched against the official IAMS registry. No data is stored by this portal.</p>
+            </div>
+ 
+            <div id="message"></div>
+ 
+        </div>
+ 
+    </div>
+</main>
+ 
+<!-- FOOTER -->
 <footer>
-    &copy; 2026 Bureau of Customs HRMD | COR Retrieval System
+    &copy; 2026 &nbsp;<span class="footer-brand">Bureau of Customs</span>&nbsp; — Human Resource Management Division &nbsp;|&nbsp; COR Retrieval System
 </footer>
-
+ 
 <script>
     const sbUrl = "https://ywbppvtwsnmloqgwhxla.supabase.co";
-    const sbKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YnBwdnR3c25tbG9xZ3doeGxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5MDkwODgsImV4cCI6MjA4OTQ4NTA4OH0.kIoOfNkYWEwmArLa2A5U4RGgcdXtBml2Ggw8obxBll0"; // Get from: Supabase Dashboard → Project Settings → API → anon public
-
+    const sbKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YnBwdnR3c25tbG9xZ3doeGxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5MDkwODgsImV4cCI6MjA4OTQ4NTA4OH0.kIoOfNkYWEwmArLa2A5U4RGgcdXtBml2Ggw8obxBll0";
     const client = window.supabase.createClient(sbUrl, sbKey);
-
+ 
     async function verifyUser() {
         const btn = document.getElementById('submitBtn');
         const msg = document.getElementById('message');
         const emailInput = document.getElementById('email').value.trim().toLowerCase();
         let contactInput = document.getElementById('contact').value.trim();
-
-        // Remove leading 0 if typed
-        if (contactInput.startsWith('0')) {
-            contactInput = contactInput.substring(1);
-        }
-
+ 
+        if (contactInput.startsWith('0')) contactInput = contactInput.substring(1);
+ 
         if (!emailInput || !contactInput) {
-            msg.innerHTML = "<div class='error-box'>Please fill in all fields.</div>";
+            msg.innerHTML = "<div class='error-box'>⚠️ <strong>Incomplete Fields</strong> — Please fill in both your email and contact number before proceeding.</div>";
             return;
         }
-
+ 
         btn.disabled = true;
-        msg.innerHTML = "Authenticating...";
-
+        btn.classList.add('loading');
+        btn.textContent = 'Authenticating…';
+        msg.innerHTML = '';
+ 
         try {
             const { data, error } = await client
                 .from('COR')
                 .select('*')
                 .ilike('EMAIL ADDRESS REGISTERED ON IAMS', emailInput)
                 .eq('CONTACT NUMBER', contactInput);
-
+ 
             if (error) {
-                console.error('Supabase error:', error);
-                msg.innerHTML = `<div class='error-box'><strong>❌ Database Error</strong><br>${error.message}</div>`;
-                btn.disabled = false;
-                return;
-            }
-
-            if (!data || data.length === 0) {
-                msg.innerHTML = "<div class='error-box'><strong>❌ Incorrect Details</strong><br>No matching record found.</div>";
-                btn.disabled = false;
+                msg.innerHTML = `<div class='error-box'>❌ <strong>Database Error</strong><br>${error.message}</div>`;
+            } else if (!data || data.length === 0) {
+                msg.innerHTML = "<div class='error-box'>❌ <strong>No Record Found</strong><br>The details you entered don't match any record in our system. Please double-check your registered email and contact number.</div>";
             } else {
                 const record = data[0];
                 const corUrl = record['COR URL'];
                 const position = record['POSITION'] || 'Applicant';
-
+ 
                 msg.innerHTML = `
                     <div class="success-box">
-                        <strong>✅ Verified!</strong><br>
-                        Position: ${position}<br><br>
+                        <div class="verified-badge">✔ Identity Verified</div>
+                        <div class="position-label">Registered Position</div>
+                        <div class="position-value">${position}</div>
                         ${corUrl
-                            ? `<a href="${corUrl}" target="_blank" class="download-btn">📥 SHOW PDF</a>`
-                            : `<span style="color:#c53030;">No certificate file linked to this record yet.</span>`
+                            ? `<a href="${corUrl}" target="_blank" rel="noopener" class="download-btn">📄 &nbsp;View Certificate PDF</a>`
+                            : `<span class="no-cert">No certificate file is linked to this record yet. Please contact HRMD directly.</span>`
                         }
                     </div>`;
             }
         } catch (err) {
-            console.error('Unexpected error:', err);
-            msg.innerHTML = "<div class='error-box'>System busy. Please try again.</div>";
+            msg.innerHTML = "<div class='error-box'>⚠️ System is currently busy. Please try again in a moment.</div>";
+        } finally {
             btn.disabled = false;
+            btn.classList.remove('loading');
+            btn.textContent = 'Generate Certificate of Rating';
         }
     }
+ 
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') verifyUser();
+    });
 </script>
 </body>
 </html>
