@@ -23,9 +23,9 @@
             --border-nav:  rgba(255,255,255,0.18);
             --shadow-card: 0 20px 60px rgba(0,31,77,0.13), 0 4px 16px rgba(0,31,77,0.08);
         }
- 
+
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
         body {
             font-family: 'DM Sans', sans-serif;
             background-color: var(--off-white);
@@ -35,7 +35,7 @@
             color: var(--text-body);
             overflow-x: hidden;
         }
- 
+
         /* Subtle dot-grid background */
         body::before {
             content: '';
@@ -46,7 +46,7 @@
             pointer-events: none;
             z-index: 0;
         }
- 
+
         /* ── Header ── */
         header {
             position: relative;
@@ -59,7 +59,7 @@
             min-height: 90px;
             box-shadow: 0 4px 24px rgba(0,31,77,0.25);
         }
- 
+
         /* Gold accent stripe at very top */
         header::before {
             content: '';
@@ -68,7 +68,7 @@
             height: 4px;
             background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
         }
- 
+
         .logo-slot {
             width: 66px;
             height: 66px;
@@ -82,21 +82,21 @@
             flex-shrink: 0;
             transition: border-color 0.3s, background 0.3s;
         }
- 
+
         .logo-slot:hover {
             border-color: var(--gold);
             background: rgba(255,255,255,0.15);
         }
- 
+
         .logo-slot img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             padding: 7px;
         }
- 
+
         .header-text { flex: 1; }
- 
+
         .header-text h1 {
             font-family: 'Playfair Display', serif;
             font-size: clamp(1.5rem, 2.8vw, 2rem);
@@ -105,7 +105,7 @@
             color: var(--white);
             line-height: 1;
         }
- 
+
         .header-subtitle {
             margin-top: 5px;
             font-size: 0.68rem;
@@ -114,15 +114,15 @@
             text-transform: uppercase;
             font-weight: 500;
         }
- 
+
         .header-divider {
             width: 1px;
             height: 40px;
             background: var(--border-nav);
         }
- 
+
         .header-meta { text-align: right; }
- 
+
         .header-meta .agency {
             font-size: 0.7rem;
             letter-spacing: 1px;
@@ -130,14 +130,14 @@
             text-transform: uppercase;
             font-weight: 500;
         }
- 
+
         .header-meta .dept {
             font-size: 0.82rem;
             color: rgba(255,255,255,0.85);
             font-weight: 600;
             margin-top: 2px;
         }
- 
+
         /* ── Hero band ── */
         .hero-band {
             position: relative;
@@ -149,14 +149,14 @@
             gap: 10px;
             border-bottom: 1px solid rgba(255,255,255,0.07);
         }
- 
+
         .hero-band .dot {
             width: 6px; height: 6px;
             border-radius: 50%;
             background: var(--gold);
             flex-shrink: 0;
         }
- 
+
         .hero-band span {
             font-size: 0.69rem;
             letter-spacing: 2.5px;
@@ -164,7 +164,7 @@
             color: rgba(255,255,255,0.5);
             font-weight: 500;
         }
- 
+
         .hero-band .pill {
             margin-left: auto;
             padding: 4px 12px;
@@ -177,7 +177,7 @@
             color: var(--gold-light);
             font-weight: 600;
         }
- 
+
         /* ── Main ── */
         main {
             position: relative;
@@ -188,7 +188,7 @@
             align-items: flex-start;
             padding: 52px 20px 60px;
         }
- 
+
         .main-inner {
             width: 100%;
             max-width: 520px;
@@ -196,10 +196,10 @@
             flex-direction: column;
             gap: 20px;
         }
- 
+
         /* ── Page title ── */
         .page-title { text-align: center; }
- 
+
         .page-title h2 {
             font-family: 'Playfair Display', serif;
             font-size: clamp(1.35rem, 3vw, 1.75rem);
@@ -207,14 +207,14 @@
             color: var(--navy);
             line-height: 1.2;
         }
- 
+
         .page-title p {
             margin-top: 8px;
             font-size: 0.87rem;
             color: var(--text-muted);
             line-height: 1.6;
         }
- 
+
         /* ── Card ── */
         .card {
             background: var(--white);
@@ -226,7 +226,7 @@
             position: relative;
             overflow: hidden;
         }
- 
+
         /* Navy left accent bar */
         .card::before {
             content: '';
@@ -236,12 +236,12 @@
             background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 100%);
             border-radius: 18px 0 0 18px;
         }
- 
+
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
         }
- 
+
         /* ── Section label ── */
         .section-label {
             display: flex;
@@ -249,7 +249,7 @@
             gap: 12px;
             margin-bottom: 30px;
         }
- 
+
         .section-label-icon {
             width: 36px; height: 36px;
             border-radius: 9px;
@@ -260,22 +260,22 @@
             font-size: 1rem;
             flex-shrink: 0;
         }
- 
+
         .section-label-text .title {
             font-size: 0.84rem;
             font-weight: 700;
             color: var(--navy);
         }
- 
+
         .section-label-text .subtitle {
             font-size: 0.72rem;
             color: var(--text-muted);
             margin-top: 1px;
         }
- 
+
         /* ── Input group ── */
         .input-group { margin-bottom: 20px; }
- 
+
         label {
             display: block;
             font-size: 0.73rem;
@@ -285,9 +285,9 @@
             color: var(--navy);
             margin-bottom: 8px;
         }
- 
+
         .input-wrapper { position: relative; }
- 
+
         .input-icon {
             position: absolute;
             left: 14px;
@@ -298,7 +298,7 @@
             pointer-events: none;
             transition: color 0.2s;
         }
- 
+
         input {
             width: 100%;
             padding: 14px 14px 14px 42px;
@@ -311,17 +311,17 @@
             transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
             outline: none;
         }
- 
+
         input::placeholder { color: #b0bcc8; }
- 
+
         input:focus {
             border-color: var(--navy-mid);
             background: var(--white);
             box-shadow: 0 0 0 3px rgba(0,45,107,0.09);
         }
- 
+
         .input-wrapper:focus-within .input-icon { color: var(--navy-mid); }
- 
+
         /* ── Separator ── */
         .sep {
             display: flex;
@@ -329,14 +329,14 @@
             gap: 12px;
             margin: 6px 0 22px;
         }
- 
+
         .sep::before, .sep::after {
             content: '';
             flex: 1;
             height: 1px;
             background: var(--border);
         }
- 
+
         .sep span {
             font-size: 0.67rem;
             letter-spacing: 1.5px;
@@ -344,7 +344,7 @@
             color: #b0bcc8;
             font-weight: 600;
         }
- 
+
         /* ── Button ── */
         .btn-primary {
             width: 100%;
@@ -365,17 +365,17 @@
             position: relative;
             overflow: hidden;
         }
- 
+
         .btn-primary:hover:not(:disabled) {
             background-position: 100% 0;
             transform: translateY(-1px);
             box-shadow: 0 8px 28px rgba(0,45,107,0.35);
         }
- 
+
         .btn-primary:active:not(:disabled) { transform: translateY(0); }
- 
+
         .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
- 
+
         .btn-primary.loading::after {
             content: '';
             position: absolute;
@@ -384,12 +384,12 @@
             background-size: 200% 100%;
             animation: shimmer 1.2s infinite;
         }
- 
+
         @keyframes shimmer {
             from { background-position: -200% 0; }
             to   { background-position:  200% 0; }
         }
- 
+
         /* ── Info note ── */
         .note-strip {
             display: flex;
@@ -401,18 +401,18 @@
             margin-top: 18px;
             border-left: 3px solid var(--navy-mid);
         }
- 
+
         .note-strip .note-icon { font-size: 0.85rem; margin-top: 1px; flex-shrink: 0; }
- 
+
         .note-strip p {
             font-size: 0.74rem;
             color: var(--text-muted);
             line-height: 1.55;
         }
- 
+
         /* ── Message area ── */
         #message { margin-top: 22px; }
- 
+
         .error-box {
             padding: 15px 17px;
             background: #fff5f5;
@@ -423,7 +423,7 @@
             line-height: 1.55;
             animation: fadeUp 0.3s ease;
         }
- 
+
         .success-box {
             padding: 24px 22px;
             background: var(--navy-pale);
@@ -434,7 +434,7 @@
             animation: fadeUp 0.3s ease;
             text-align: center;
         }
- 
+
         .success-box .verified-badge {
             display: inline-flex;
             align-items: center;
@@ -449,7 +449,7 @@
             font-weight: 700;
             margin-bottom: 16px;
         }
- 
+
         .success-box .position-label {
             font-size: 0.7rem;
             text-transform: uppercase;
@@ -458,7 +458,7 @@
             margin-bottom: 4px;
             font-weight: 600;
         }
- 
+
         .success-box .position-value {
             font-family: 'Playfair Display', serif;
             font-size: 1.15rem;
@@ -466,7 +466,7 @@
             margin-bottom: 22px;
             font-weight: 700;
         }
- 
+
         .download-btn {
             display: inline-flex;
             align-items: center;
@@ -483,14 +483,14 @@
             transition: transform 0.15s, box-shadow 0.2s;
             box-shadow: 0 4px 16px rgba(0,45,107,0.28);
         }
- 
+
         .download-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(0,45,107,0.38);
         }
- 
+
         .no-cert { color: #b91c1c; font-size: 0.85rem; }
- 
+
         /* ── Footer ── */
         footer {
             position: relative;
@@ -503,12 +503,12 @@
             color: var(--text-muted);
             background: var(--white);
         }
- 
+
         footer .footer-brand {
             font-weight: 700;
             color: var(--navy);
         }
- 
+
         /* ── Responsive ── */
         @media (max-width: 560px) {
             header { padding: 0 20px; min-height: 76px; gap: 14px; }
@@ -520,7 +520,7 @@
     </style>
 </head>
 <body>
- 
+
 <!-- HEADER -->
 <header>
     <div class="logo-slot">
@@ -537,25 +537,25 @@
         <div class="dept">Bureau of Customs</div>
     </div>
 </header>
- 
+
 <!-- HERO BAND -->
 <div class="hero-band">
     <div class="dot"></div>
     <span>Human Resource Management Division</span>
     <div class="pill">🔒 Secure Portal</div>
 </div>
- 
+
 <!-- MAIN -->
 <main>
     <div class="main-inner">
- 
+
         <div class="page-title">
             <h2>Certificate of Rating Retrieval</h2>
             <p>Authenticate with your IAMS-registered credentials to access and download your official Certificate of Rating.</p>
         </div>
- 
+
         <div class="card">
- 
+
             <div class="section-label">
                 <div class="section-label-icon">🪪</div>
                 <div class="section-label-text">
@@ -563,7 +563,7 @@
                     <div class="subtitle">Enter details exactly as registered on IAMS</div>
                 </div>
             </div>
- 
+
             <div class="input-group">
                 <label for="email">Email Address</label>
                 <div class="input-wrapper">
@@ -571,7 +571,7 @@
                     <input type="email" id="email" placeholder="juan.delacruz@example.com" autocomplete="email">
                 </div>
             </div>
- 
+
             <div class="input-group">
                 <label for="contact">Contact Number</label>
                 <div class="input-wrapper">
@@ -579,73 +579,73 @@
                     <input type="text" id="contact" placeholder="9171234567" inputmode="numeric" maxlength="11">
                 </div>
             </div>
- 
+
             <div class="sep"><span>Proceed</span></div>
- 
+
             <button class="btn-primary" id="submitBtn" onclick="verifyUser()">
                 Generate Certificate of Rating
             </button>
- 
+
             <div class="note-strip">
                 <span class="note-icon">ℹ️</span>
                 <p>Your information is matched against the official IAMS registry. No data is stored by this portal.</p>
             </div>
- 
+
             <div id="message"></div>
- 
+
         </div>
- 
+
     </div>
 </main>
- 
+
 <!-- FOOTER -->
 <footer>
     &copy; 2026 &nbsp;<span class="footer-brand">Bureau of Customs</span>&nbsp; — Human Resource Management Division &nbsp;|&nbsp; COR Retrieval System
 </footer>
- 
+
 <script>
     const sbUrl = "https://ywbppvtwsnmloqgwhxla.supabase.co";
     const sbKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YnBwdnR3c25tbG9xZ3doeGxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5MDkwODgsImV4cCI6MjA4OTQ4NTA4OH0.kIoOfNkYWEwmArLa2A5U4RGgcdXtBml2Ggw8obxBll0";
     const client = window.supabase.createClient(sbUrl, sbKey);
- 
+
     async function verifyUser() {
         const btn = document.getElementById('submitBtn');
         const msg = document.getElementById('message');
         const emailInput = document.getElementById('email').value.trim().toLowerCase();
         let contactInput = document.getElementById('contact').value.trim();
- 
+
         if (contactInput.startsWith('0')) contactInput = contactInput.substring(1);
- 
+
         if (!emailInput || !contactInput) {
             msg.innerHTML = "<div class='error-box'>⚠️ <strong>Incomplete Fields</strong> — Please fill in both your email and contact number before proceeding.</div>";
             return;
         }
- 
+
         btn.disabled = true;
         btn.classList.add('loading');
         btn.textContent = 'Authenticating…';
         msg.innerHTML = '';
- 
+
         try {
             const { data, error } = await client
                 .from('COR')
                 .select('*')
                 .ilike('EMAIL ADDRESS REGISTERED ON IAMS', emailInput)
                 .eq('CONTACT NUMBER', contactInput);
- 
+
             if (error) {
                 msg.innerHTML = `<div class='error-box'>❌ <strong>Database Error</strong><br>${error.message}</div>`;
             } else if (!data || data.length === 0) {
-                msg.innerHTML = "<div class='error-box'>❌ <strong>No Record Found</strong><br>The details you entered don't match any record in our system. Please double-check your registered email and contact number. When entering your contact number, omit the leading zero (e.g., use 9123456789 instead of 09123456789).</div>";
+                msg.innerHTML = "<div class='error-box'>❌ <strong>No Record Found</strong><br>The details you entered don't match any record in our system. Please double-check your registered email and contact number. When entering your contact number, omit the leading zero (e.g., use <strong>9123456789</strong> instead of <strong>09123456789</strong>).<br><br>Please <a href='https://forms.google.com' target='_blank' rel='noopener' style='color:#b91c1c; font-weight:700; text-decoration:underline;'>click here</a> if you need to change your IAMS credentials.</div>";
             } else {
                 const record = data[0];
                 const corUrl = record['COR URL'];
                 const position = record['POSITION'] || 'Applicant';
- 
+
                 msg.innerHTML = `
                     <div class="success-box">
                         <div class="verified-badge">✔ Identity Verified</div>
-                        <div class="position-label">Position Applied:</div>
+                        <div class="position-label">Registered Position</div>
                         <div class="position-value">${position}</div>
                         ${corUrl
                             ? `<a href="${corUrl}" target="_blank" rel="noopener" class="download-btn">📄 &nbsp;View Certificate PDF</a>`
@@ -661,7 +661,7 @@
             btn.textContent = 'Generate Certificate of Rating';
         }
     }
- 
+
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') verifyUser();
     });
