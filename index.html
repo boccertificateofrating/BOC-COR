@@ -42,7 +42,7 @@
             <label>Contact Number (as registered on IAMS)</label>
             <input type="text" id="contact" placeholder="e.g. 9171234567">
         </div>
-        <button id="submitBtn" onclick="verifyUser()">GENERATE CERTIFICATE PDF</button>
+        <button id="submitBtn" onclick="verifyUser()">GENERATE CERTIFICATE OF RATING</button>
         <div id="message"></div>
     </div>
 </div>
@@ -103,7 +103,7 @@
                         <strong>✅ Verified!</strong><br>
                         Position: ${position}<br><br>
                         ${corUrl
-                            ? `<a href="${corUrl}" target="_blank" class="download-btn">📥 DOWNLOAD PDF</a>`
+                            ? `<a href="${corUrl}" target="_blank" class="download-btn">📥 SHOW PDF</a>`
                             : `<span style="color:#c53030;">No certificate file linked to this record yet.</span>`
                         }
                     </div>`;
