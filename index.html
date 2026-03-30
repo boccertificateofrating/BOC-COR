@@ -636,7 +636,7 @@
             if (error) {
                 msg.innerHTML = `<div class='error-box'>❌ <strong>Database Error</strong><br>${error.message}</div>`;
             } else if (!data || data.length === 0) {
-                msg.innerHTML = "<div class='error-box'>❌ <strong>No Record Found</strong><br>The details you entered don't match any record in our system. Please double-check your registered email and contact number. When entering your contact number, omit the leading zero (e.g., use <strong>9123456789</strong> instead of <strong>09123456789</strong>).<br><br>Please <a href='https://forms.google.com' target='_blank' rel='noopener' style='color:#b91c1c; font-weight:700; text-decoration:underline;'>click here</a> if you need to change your IAMS credentials.</div>";
+                msg.innerHTML = "<div class='error-box'>❌ <strong>No Record Found</strong><br>The details you entered don't match any record in our system. Please double-check your registered email and contact number. When entering your contact number, omit the leading zero (e.g., use <strong>9123456789</strong> instead of <strong>09123456789</strong>).<br><br>Please <a href='https://docs.google.com/forms/d/e/1FAIpQLSfnyVv8kZJbINgMk-TFz3YCDw8hHDoJvuXgilnctRah0tRWmA/viewform?usp=header' target='_blank' rel='noopener' style='color:#b91c1c; font-weight:700; text-decoration:underline;'>click here</a> if you need to change your IAMS credentials.</div>";
             } else {
                 const record = data[0];
                 const corUrl = record['COR URL'];
